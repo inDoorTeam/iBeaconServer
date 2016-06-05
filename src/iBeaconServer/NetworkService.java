@@ -29,11 +29,10 @@ public class NetworkService implements Runnable {
             try {
                 System.out.println("Waiting for client....");
                 user = new User(serverSocket.accept());
-               
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
-
 
             try {
                 JSONObject receiveObject;
@@ -44,8 +43,6 @@ public class NetworkService implements Runnable {
                 receiveObject = new JSONObject(receiveMessage);
                 String userName = receiveObject.getString(JSON.KEY_USER_NAME);
                 String userPasswd = receiveObject.getString(JSON.KEY_USER_PWD);
-                System.out.println(userName);
-                System.out.println(userPasswd);
 
                 GuideDB guideDB = GuideDB.getInstance();
                 System.out.println(guideDB);
