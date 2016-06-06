@@ -18,7 +18,6 @@ public class GuideDB {
     public static GuideDB getInstance() {
         if(guideDB == null)
             guideDB = (new GuideDB());
-        System.out.println(guideDB);
         return guideDB;
     }
     public Member getMemberByUserAccountAndPsd(String userAccount, String userPwd) {

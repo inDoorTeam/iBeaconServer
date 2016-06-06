@@ -45,7 +45,7 @@ public class ClientHandler implements Runnable {
                     e.printStackTrace();
                 }
                 status = receiveJSON.getInt(JSON.KEY_STATE);
-                System.out.println("==========================");switch(status) {
+                switch(status) {
                     case JSON.STATE_LOGOUT:
                         logoutHandler();
                         break;
@@ -56,6 +56,10 @@ public class ClientHandler implements Runnable {
                         System.out.println("Major = " + receiveJSON.get(JSON.KEY_MAJOR));
                         System.out.println("Minor = " + receiveJSON.get(JSON.KEY_MINOR));
                         System.out.println("==========================");
+//                        JSONObject sendObject = new JSONObject();
+//                        sendObject.put(JSON.KEY_STATE, JSON.STATE_WHOAMI);
+//                        sendObject.put(JSON.KEY_USER_NAME, client.getUserAccount());
+//                        client.send(sendObject.toString());
                         break;
                     case JSON.STATE_LOGIN:
 

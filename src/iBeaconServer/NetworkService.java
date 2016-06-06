@@ -45,18 +45,17 @@ public class NetworkService implements Runnable {
                 String userPasswd = receiveObject.getString(JSON.KEY_USER_PWD);
 
                 GuideDB guideDB = GuideDB.getInstance();
-                System.out.println(guideDB);
                 Member member = guideDB.getMemberByUserAccountAndPsd(userName, userPasswd);
 
                 if(member != null) {
                     user.setUserAccount(userName);
-                    System.out.print(member.toString());
                     JSONObject jsonObject = new JSONObject();
-
+                    jsonObject.put(JSON.KEY_RESULT, true);
+                    jsonObject.put(JSON.KEY_RESULT_MESSAGE, JSON.KEY_LOGIN_SUCCESS);
                     jsonObject.put(JSON.KEY_USER_NAME, member.getAccount());
                     jsonObject.put(JSON.KEY_USER_PWD, member.getPwd());
                     System.out.println("Login Success");
-                   // user.send(jsonObject.toString());
+                    user.send(jsonObject.toString());
 
                     if(user.isConnected()) {
                         guideDB.setOnlineTag(1, userName);
@@ -67,10 +66,10 @@ public class NetworkService implements Runnable {
                 }
                 else {
 
-//                    JSONObject jsonObject = new JSONObject();
-//                    jsonObject.put(JSON.KEY_RESULT, false);
-//                    jsonObject.put(JSON.KEY_RESULT_MESSAGE, JSON.KEY_LOGIN_FAIL);
-//                    user.send(jsonObject.toString());
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put(JSON.KEY_RESULT, false);
+                    jsonObject.put(JSON.KEY_RESULT_MESSAGE, JSON.KEY_LOGIN_FAIL);
+                    user.send(jsonObject.toString());
 
                     user.close();
                 }

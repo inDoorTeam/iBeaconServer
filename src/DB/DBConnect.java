@@ -26,7 +26,6 @@ public class DBConnect {
     public static Connection getConn() {
         if(con == null)
             new DBConnect();
-        System.out.println(con);
         return con;
     }
     

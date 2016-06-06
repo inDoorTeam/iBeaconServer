@@ -81,7 +81,7 @@ public class User {
 
     private Socket socket;
     private DataInputStream input;
-    private PrintWriter output;
+    private DataOutputStream output;
     private String userAccount;
     private String location;
     private boolean isClose = false;
@@ -90,7 +90,7 @@ public class User {
         this.socket = socket;
         isClose = false;
         input = new DataInputStream(socket.getInputStream());
-        output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
+        output = new DataOutputStream(socket.getOutputStream());
         if(socket.isConnected()){
             try{
                 System.out.println("Connect from = " + socket.getInetAddress().getHostAddress() );
@@ -120,7 +120,11 @@ public class User {
 
     public void send(String message) {
         if(!socket.isOutputShutdown())
-            output.println(message);
+            try {
+                output.writeUTF(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
     public void send(Socket otherSocket, String message) {
