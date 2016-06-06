@@ -60,14 +60,17 @@ public class ClientHandler implements Runnable {
                         JSONObject friendLocationJSONObject = new JSONObject();
                         JSONArray friendLocationJSONArray = new JSONArray();
                         friendLocationJSONObject.put(JSON.KEY_STATE, JSON.STATE_FIND_FRIEND);
-                        for(User u : clientList){
-                            JSONObject JSONObject = new JSONObject();
-                            JSONObject.put(JSON.KEY_USER_NAME, u.getUserAccount());
-                            JSONObject.put(JSON.KEY_LOCATION, u.getUserLocation());
-                            friendLocationJSONArray.put(JSONObject);
+                        for(User u : clientList) {
+                            if (!u.getUserAccount().equals(client.getUserAccount())) {
+                                JSONObject JSONObject = new JSONObject();
+                                JSONObject.put(JSON.KEY_USER_NAME, u.getUserAccount());
+                                JSONObject.put(JSON.KEY_LOCATION, u.getUserLocation());
+                                friendLocationJSONArray.put(JSONObject);
+                            }
                         }
                         friendLocationJSONObject.put(JSON.KEY_USER_LIST, friendLocationJSONArray);
                         System.out.println(friendLocationJSONObject);
+                        client.send(friendLocationJSONObject.toString());
                         break;
                     default:
                         //do nothing..
@@ -97,7 +100,7 @@ public class ClientHandler implements Runnable {
             client.send(jsonObject.toString());
             clientList.remove(client);
             client.close();
-
+            System.out.println("Logout Sueecss!");
         }
         else {
             JSONObject jsonObject = new JSONObject();
