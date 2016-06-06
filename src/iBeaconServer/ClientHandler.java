@@ -1,6 +1,7 @@
 package iBeaconServer;
 
 import DB.GuideDB;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,19 +51,23 @@ public class ClientHandler implements Runnable {
                         logoutHandler();
                         break;
                     case JSON.STATE_SEND_IBEACON:
-                        System.out.println("==========================");
-                        System.out.println("Rssi = " + receiveJSON.get(JSON.KEY_RSSI));
-                        System.out.println("Uuid = " + receiveJSON.get(JSON.KEY_UUID));
-                        System.out.println("Major = " + receiveJSON.get(JSON.KEY_MAJOR));
-                        System.out.println("Minor = " + receiveJSON.get(JSON.KEY_MINOR));
-                        System.out.println("==========================");
-//                        JSONObject sendObject = new JSONObject();
-//                        sendObject.put(JSON.KEY_STATE, JSON.STATE_WHOAMI);
-//                        sendObject.put(JSON.KEY_USER_NAME, client.getUserAccount());
-//                        client.send(sendObject.toString());
-                        break;
+                        String location = receiveJSON.getString(JSON.KEY_LOCATION);
+                        client.setUserLocation(location);
+                        System.out.println(client.getUserAccount() + " in " + location);
                     case JSON.STATE_LOGIN:
-
+                        break;
+                    case JSON.STATE_FIND_FRIEND:
+                        JSONObject friendLocationJSONObject = new JSONObject();
+                        JSONArray friendLocationJSONArray = new JSONArray();
+                        friendLocationJSONObject.put(JSON.KEY_STATE, JSON.STATE_FIND_FRIEND);
+                        for(User u : clientList){
+                            JSONObject JSONObject = new JSONObject();
+                            JSONObject.put(JSON.KEY_USER_NAME, u.getUserAccount());
+                            JSONObject.put(JSON.KEY_LOCATION, u.getUserLocation());
+                            friendLocationJSONArray.put(JSONObject);
+                        }
+                        friendLocationJSONObject.put(JSON.KEY_USER_LIST, friendLocationJSONArray);
+                        System.out.println(friendLocationJSONObject);
                         break;
                     default:
                         //do nothing..

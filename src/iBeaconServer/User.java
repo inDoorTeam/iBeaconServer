@@ -164,4 +164,7 @@ public class User {
     public String getIpAddress() {
         return socket.getInetAddress().toString();
     }
+    public String toString(){
+        return userAccount;
+    }
 }

@@ -2,6 +2,7 @@ package DB;
 
 import java.security.MessageDigest;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Formatter;
 
 import iBeaconServer.Member;
@@ -44,23 +45,7 @@ public class GuideDB {
             return null;
         }
     }
-    
-//    public int setOnlineTag(int isOnline, String account) {
-//        String sql = "UPDATE member SET OnlineTag = ? WHERE Account = ?";
-//        int result = 0;
-//        try {
-//            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-//            preparedStatement.setInt(1, isOnline);
-//            preparedStatement.setString(2, account);
-//            result = preparedStatement.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return result;
-//
-//    }
+
     private static String byteToHex(byte[] digest) {
       // TODO Auto-generated method stub
       Formatter formatter = new Formatter();
@@ -71,6 +56,7 @@ public class GuideDB {
       formatter.close();
       return result;
     }
+
     private static String encryptPassword(String password){
         String sha1 = "";
         try{
