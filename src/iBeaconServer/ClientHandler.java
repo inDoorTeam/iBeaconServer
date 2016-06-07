@@ -68,6 +68,7 @@ public class ClientHandler implements Runnable {
                                 friendLocationJSONArray.put(JSONObject);
                             }
                         }
+                        int i = 1;
                         friendLocationJSONObject.put(JSON.KEY_USER_LIST, friendLocationJSONArray);
                         System.out.println(friendLocationJSONObject);
                         client.send(friendLocationJSONObject.toString());
