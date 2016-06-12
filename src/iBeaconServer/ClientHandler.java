@@ -94,9 +94,9 @@ public class ClientHandler implements Runnable {
         if(guideDB.setOnlineTag(0, client.getUserAccount()) > 0) {
 
             JSONObject jsonObject = new JSONObject();
-//            jsonObject.put(JSON.KEY_STATUS, JSON.STATUS_LOGOUT);
-//            jsonObject.put(JSON.KEY_RESULT, true);
-//            jsonObject.put(JSON.KEY_RESULT_MESSAGE, JSON.KEY_LOGOUT_SUCCESS);
+            jsonObject.put(JSON.KEY_STATE, JSON.STATE_LOGOUT);
+            jsonObject.put(JSON.KEY_RESULT, true);
+            jsonObject.put(JSON.KEY_RESULT_MESSAGE, JSON.KEY_LOGOUT_SUCCESS);
             client.send(jsonObject.toString());
             clientList.remove(client);
             client.close();
@@ -104,8 +104,8 @@ public class ClientHandler implements Runnable {
         }
         else {
             JSONObject jsonObject = new JSONObject();
-//            jsonObject.put(JSON.KEY_RESULT, false);
-//            jsonObject.put(JSON.KEY_RESULT_MESSAGE, JSON.KEY_LOGOUT_FAIL);
+            jsonObject.put(JSON.KEY_RESULT, false);
+            jsonObject.put(JSON.KEY_RESULT_MESSAGE, JSON.KEY_LOGOUT_FAIL);
             client.send(jsonObject.toString());
         }
     }

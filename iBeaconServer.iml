@@ -33,5 +33,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="org.json-20120521" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-5.1.39-bin" level="project" />
   </component>
 </module>
