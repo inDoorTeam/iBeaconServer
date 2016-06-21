@@ -46,6 +46,7 @@ public class ClientHandler implements Runnable {
                     e.printStackTrace();
                 }
                 status = receiveJSON.getInt(JSON.KEY_STATE);
+                System.out.println(receiveMessage);
                 switch(status) {
                     case JSON.STATE_LOGOUT:
                         logoutHandler();
@@ -54,6 +55,14 @@ public class ClientHandler implements Runnable {
                         String location = receiveJSON.getString(JSON.KEY_LOCATION);
                         client.setUserLocation(location);
                         System.out.println(client.getUserAccount() + " in " + location);
+                        for(User u : clientList){
+                            if( u.getBindingState() ) {
+                                System.out.println(u.getUserAccount() + " is Binding");
+                                JSONObject locationChangeJSONObject = new JSONObject();
+                                locationChangeJSONObject.put(JSON.KEY_STATE, JSON.STATE_CAR_MOVE);
+                                u.send(locationChangeJSONObject.toString());
+                            }
+                        }
                     case JSON.STATE_LOGIN:
                         break;
                     case JSON.STATE_FIND_FRIEND:
@@ -72,7 +81,13 @@ public class ClientHandler implements Runnable {
                         System.out.println(friendLocationJSONObject);
                         client.send(friendLocationJSONObject.toString());
                         break;
+                    case JSON.STATE_CAR_BINDING:
+                        boolean binding = receiveJSON.getBoolean(JSON.KEY_BINDING);
+                        client.setBindingState(binding);
+                        System.out.println("User : " + client.getUserAccount() + " BINDING : " + binding);
+                        break;
                     default:
+                        System.out.println("");
                         //do nothing..
                         break;
                 }

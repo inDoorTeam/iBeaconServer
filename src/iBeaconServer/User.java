@@ -85,6 +85,7 @@ public class User {
     private String userAccount;
     private String location;
     private boolean isClose = false;
+    private boolean isBinding = false;
 
     public User(Socket socket) throws IOException {
         this.socket = socket;
@@ -119,14 +120,14 @@ public class User {
     }
 
     public void send(String message) {
-        if(!socket.isOutputShutdown())
+        if(!socket.isOutputShutdown()) {
             try {
                 output.writeUTF(message);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
     }
-
     public void send(Socket otherSocket, String message) {
         try {
             PrintWriter otherOutput = new PrintWriter(new OutputStreamWriter(otherSocket.getOutputStream(), "UTF-8"), true);
@@ -166,5 +167,11 @@ public class User {
     }
     public String toString(){
         return userAccount;
+    }
+    public boolean getBindingState(){
+        return isBinding;
+    }
+    public void setBindingState(boolean binding){
+        isBinding = binding;
     }
 }

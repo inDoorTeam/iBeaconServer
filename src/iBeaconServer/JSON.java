@@ -12,6 +12,7 @@ public class JSON {
     public static final String KEY_RESULT_MESSAGE = "resultMessage";
     public static final String KEY_LOCATION = "LOCATION";
     public static final String KEY_USER_LIST = "用戶清單";
+    public static final String KEY_BINDING = "BINDING";
 
 
     public static final String KEY_LOGIN_SUCCESS = "登入成功";
@@ -26,4 +27,6 @@ public class JSON {
     public static final int STATE_LOGIN = 2 ;
     public static final int STATE_WHOAMI = 3 ;
     public static final int STATE_FIND_FRIEND = 4 ;
+    public static final int STATE_CAR_BINDING = 5 ;
+    public static final int STATE_CAR_MOVE = 6 ;
 }
