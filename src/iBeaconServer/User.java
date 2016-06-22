@@ -123,6 +123,8 @@ public class User {
         if(!socket.isOutputShutdown()) {
             try {
                 output.writeUTF(message);
+                output.flush();
+                System.out.println("傳送 : " + message);
             } catch (IOException e) {
                 e.printStackTrace();
             }

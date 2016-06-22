@@ -15,6 +15,7 @@ public class ClientHandler implements Runnable {
     private GuideDB guideDB;
 
     private User client;
+    private User isCar = null;
     private ArrayList<User> clientList;
 
     public ClientHandler(ArrayList<User> userList, User user) throws IOException {
@@ -55,14 +56,21 @@ public class ClientHandler implements Runnable {
                         String location = receiveJSON.getString(JSON.KEY_LOCATION);
                         client.setUserLocation(location);
                         System.out.println(client.getUserAccount() + " in " + location);
+                        JSONObject locationChangeJSONObject = new JSONObject();
+
                         for(User u : clientList){
-                            if( u.getBindingState() ) {
+                            if( u.getBindingState() && !u.equals(client)) {
                                 System.out.println(u.getUserAccount() + " is Binding");
-                                JSONObject locationChangeJSONObject = new JSONObject();
-                                locationChangeJSONObject.put(JSON.KEY_STATE, JSON.STATE_CAR_MOVE);
+                                locationChangeJSONObject.put(JSON.KEY_STATE, JSON.STATE_USER_MOVE);
+                                locationChangeJSONObject.put(JSON.KEY_TARGET_LOCATION, location);
+                                locationChangeJSONObject.put(JSON.KEY_RESULT, JSON.KEY_RESULT_MESSAGE);
                                 u.send(locationChangeJSONObject.toString());
+                                //System.out.println("send : " + locationChangeJSONObject.toString());
+                                isCar = u;
+                                break;
                             }
                         }
+                        break;
                     case JSON.STATE_LOGIN:
                         break;
                     case JSON.STATE_FIND_FRIEND:
@@ -85,6 +93,13 @@ public class ClientHandler implements Runnable {
                         boolean binding = receiveJSON.getBoolean(JSON.KEY_BINDING);
                         client.setBindingState(binding);
                         System.out.println("User : " + client.getUserAccount() + " BINDING : " + binding);
+                        break;
+                    case JSON.STATE_FIND_TARGET_LOCATION:
+                        String targetLocation = isCar.getUserLocation();
+                        JSONObject sendToClientJSONObject = new JSONObject();
+                        sendToClientJSONObject.put(JSON.KEY_STATE, JSON.STATE_FIND_TARGET_LOCATION);
+                        sendToClientJSONObject.put(JSON.KEY_TARGET_LOCATION, targetLocation);
+                        client.send(sendToClientJSONObject.toString());
                         break;
                     default:
                         System.out.println("");
