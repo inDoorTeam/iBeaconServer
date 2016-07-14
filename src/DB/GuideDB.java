@@ -5,8 +5,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Formatter;
 
+import iBeaconServer.Item;
 import iBeaconServer.Member;
-
+import iBeaconServer.User;
 
 
 public class GuideDB {
@@ -21,9 +22,35 @@ public class GuideDB {
             guideDB = (new GuideDB());
         return guideDB;
     }
+    public ArrayList<Item> getItemListByuser(User user){
+
+        String sql = "SELECT * FROM ItemList WHERE username = ?";
+
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, user.getUserAccount());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<Item> itemList = new ArrayList<>();
+            while (resultSet.next()) {
+                Item item = new Item();
+                item.setOwner(resultSet.getString("username"));
+                item.setItemName(resultSet.getString("item"));
+                item.setMinor(resultSet.getInt("Minor"));
+                item.setLocation(resultSet.getString("location"));
+                itemList.add(item);
+
+            }
+
+            return itemList;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     public Member getMemberByUserAccountAndPsd(String userAccount, String userPwd) {
         userPwd = encryptPassword(userPwd);
-        String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM User WHERE username = ? AND password = ?";
         Member member = null;
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -87,7 +114,7 @@ public class GuideDB {
         }
     }
     public int setOnlineTag(int isOnline, String account) {
-        String sql = "UPDATE user SET OnlineTag = ? WHERE username = ?";
+        String sql = "UPDATE User SET OnlineTag = ? WHERE username = ?";
         int result = 0;
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -100,6 +127,38 @@ public class GuideDB {
         }
 
         return result;
+
+    }
+    public int setItemLocation(Item item, String location) {
+        String sql = "UPDATE ItemList SET location = ? WHERE username = ?";
+        int result = 0;
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, location);
+            preparedStatement.setString(2, item.getOwner());
+            result = preparedStatement.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public void selectFromItemList() {
+        try {
+            Statement stat = con.createStatement();
+            ResultSet rs = stat.executeQuery(DBConfig.selectSQL);
+            System.out.println("ID\t\tusername\t\tlocation\t\t\t\t\t\titem");
+            while(rs.next()) {
+                System.out.println(rs.getInt("no") + "\t\t\t"+
+                        rs.getString("username") + "\t\t" +
+                        rs.getString("location") + "\t\t\t" + rs.getString("item"));
+            }
+        }
+        catch(SQLException e)  {
+            System.out.println("SelectDB Exception :" + e.toString());
+        }
 
     }
 }

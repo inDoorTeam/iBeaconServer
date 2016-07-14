@@ -101,6 +101,25 @@ public class ClientHandler implements Runnable {
                         sendToClientJSONObject.put(JSON.KEY_TARGET_LOCATION, targetLocation);
                         client.send(sendToClientJSONObject.toString());
                         break;
+                    case JSON.STATE_FIND_ITEM_LIST:
+                        ArrayList<Item> itemList = GuideDB.getInstance().getItemListByuser(client);
+                        System.out.println(itemList);
+
+                        JSONObject itemListJSONObject = new JSONObject();
+                        JSONArray itemListJSONArray = new JSONArray();
+                        itemListJSONObject.put(JSON.KEY_STATE, JSON.STATE_FIND_ITEM_LIST);
+                        for(Item item : itemList) {
+                            JSONObject JSONObject = new JSONObject();
+                            JSONObject.put(JSON.KEY_ITEM_NAME, item.getItemName());
+                            JSONObject.put(JSON.KEY_USER_NAME, item.getOwner());
+                            JSONObject.put(JSON.KEY_MINOR, item.getMinor());
+                            JSONObject.put(JSON.KEY_LOCATION, item.getLocation());
+                            itemListJSONArray.put(JSONObject);
+                        }
+                        itemListJSONObject.put(JSON.KEY_ITEM_LIST, itemListJSONArray);
+                        System.out.println(itemListJSONObject);
+                        client.send(itemListJSONObject.toString());
+                        break;
                     default:
                         System.out.println("");
                         //do nothing..
