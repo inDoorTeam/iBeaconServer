@@ -2,7 +2,7 @@
 <module type="JAVA_MODULE" version="4">
   <component name="EclipseModuleManager">
     <libelement value="jar://$USER_HOME$/Downloads/java-json-schema.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/../../mysql-connector-java-5.1.39/mysql-connector-java-5.1.39-bin.jar!/" />
+    <libelement value="jar://E:/mysql-connector-java-5.1.39/mysql-connector-java-5.1.39-bin.jar!/" />
     <src_description expected_position="0">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
     </src_description>
@@ -27,7 +27,7 @@
     <orderEntry type="module-library">
       <library name="mysql-connector-java-5.1.39-bin.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../mysql-connector-java-5.1.39/mysql-connector-java-5.1.39-bin.jar!/" />
+          <root url="jar://E:/mysql-connector-java-5.1.39/mysql-connector-java-5.1.39-bin.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -35,5 +35,6 @@
     </orderEntry>
     <orderEntry type="library" name="org.json-20120521" level="project" />
     <orderEntry type="library" name="mysql-connector-java-5.1.39-bin" level="project" />
+    <orderEntry type="library" name="org.json-20120521" level="project" />
   </component>
 </module>
