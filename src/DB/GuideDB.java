@@ -22,6 +22,7 @@ public class GuideDB {
             guideDB = (new GuideDB());
         return guideDB;
     }
+
     public ArrayList<Item> getItemListByuser(User user){
 
         String sql = "SELECT * FROM ItemList WHERE username = ?";
@@ -42,6 +43,25 @@ public class GuideDB {
             }
 
             return itemList;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public Item getItem(int minor){
+        String sql = "SELECT * FROM ItemList WHERE minor = ?";
+
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, String.valueOf(minor));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Item item = new Item();
+            while (resultSet.next()) {
+                item.setOwner(resultSet.getString("username"));
+                item.setItemName(resultSet.getString("item"));
+            }
+            return item;
 
         } catch (Exception e) {
             e.printStackTrace();

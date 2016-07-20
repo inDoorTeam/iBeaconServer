@@ -17,6 +17,7 @@ public class ClientHandler implements Runnable {
     private User client;
     private User isCar = null;
     private ArrayList<User> clientList;
+    private ArrayList<Item> itemList = new ArrayList<>();
 
     public ClientHandler(ArrayList<User> userList, User user) throws IOException {
         client = user;
@@ -71,6 +72,47 @@ public class ClientHandler implements Runnable {
                             }
                         }
                         break;
+                    case JSON.STATE_SEND_ITEM_IBEACON:
+                        System.out.println(receiveJSON.toString());
+                        int itemRssi = receiveJSON.getInt(JSON.KEY_RSSI);
+                        int itemMinor = receiveJSON.getInt(JSON.KEY_MINOR);
+                        String itemLocation = receiveJSON.getString(JSON.KEY_LOCATION);
+                        boolean hasItem = false;
+                        for(Item item : itemList) {
+                            if(itemMinor == item.getMinor()){
+                                if(itemRssi > item.getRssi()) {
+                                    System.out.println("itemRssi:" + itemRssi);
+                                    item.setRssi(itemRssi);
+                                    item.setLocation(itemLocation);
+                                }
+                                hasItem = true ;
+                            }
+                        }
+                        if(hasItem == false){
+                            Item item =  GuideDB.getInstance().getItem(itemMinor) ;
+                            item.setRssi(itemRssi) ;
+                            item.setMinor(itemMinor) ;
+                            item.setLocation(itemLocation) ;
+                            itemList.add(item);
+                        }
+
+                        break;
+                    case JSON.STATE_GET_ITEM_LOCATION:
+                        String itemName = receiveJSON.getString(JSON.KEY_ITEM_NAME);
+                        JSONObject sendItemLocaionJSONObject = new JSONObject();
+                        sendItemLocaionJSONObject.put(JSON.KEY_STATE, JSON.STATE_GET_ITEM_LOCATION);
+                        boolean hasItemLocation = false;
+                        for( Item item : itemList ) {
+                            if( itemName.equals(item.getItemName()) ) {
+                                sendItemLocaionJSONObject.put(JSON.KEY_ITEM_LOCATION, item.getLocation());
+                                hasItemLocation = true ;
+                            }
+                        }
+                        if( hasItemLocation == false ){
+                            sendItemLocaionJSONObject.put(JSON.KEY_ITEM_LOCATION, JSON.MESSAGE_NOLOATION);
+                        }
+                        client.send(sendItemLocaionJSONObject.toString());
+                        break;
                     case JSON.STATE_LOGIN:
                         break;
                     case JSON.STATE_FIND_FRIEND:
@@ -112,13 +154,13 @@ public class ClientHandler implements Runnable {
                         client.send(sendToClientJSONObject.toString());
                         break;
                     case JSON.STATE_FIND_ITEM_LIST:
-                        ArrayList<Item> itemList = GuideDB.getInstance().getItemListByuser(client);
+                        ArrayList<Item> userItemList = GuideDB.getInstance().getItemListByuser(client);
                         System.out.println(itemList);
 
                         JSONObject itemListJSONObject = new JSONObject();
                         JSONArray itemListJSONArray = new JSONArray();
                         itemListJSONObject.put(JSON.KEY_STATE, JSON.STATE_FIND_ITEM_LIST);
-                        for(Item item : itemList) {
+                        for(Item item : userItemList) {
                             JSONObject JSONObject = new JSONObject();
                             JSONObject.put(JSON.KEY_ITEM_NAME, item.getItemName());
                             JSONObject.put(JSON.KEY_USER_NAME, item.getOwner());

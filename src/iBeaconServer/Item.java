@@ -7,7 +7,9 @@ public class Item {
     private String itemName;
     private String Owner;
     private int Minor;
+    private int Rssi;
     private String location;
+
 
     public String getItemName() {
         return itemName;
@@ -39,5 +41,13 @@ public class Item {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public void setRssi(int rssi) {
+        Rssi = rssi;
+    }
+
+    public int getRssi() {
+        return Rssi;
     }
 }
