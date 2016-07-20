@@ -120,6 +120,13 @@ public class ClientHandler implements Runnable {
                         System.out.println(itemListJSONObject);
                         client.send(itemListJSONObject.toString());
                         break;
+                    case JSON.STATE_SEND_ASK_FOR_LOCATION:
+
+                        JSONObject JSONObject = new JSONObject();
+                        JSONObject.put(JSON.KEY_USER_NAME, client.getUserAccount());
+
+                        client.send(JSONObject.toString());
+                        break;
                     default:
                         System.out.println("");
                         //do nothing..
