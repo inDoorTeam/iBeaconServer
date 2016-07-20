@@ -18,6 +18,7 @@ public class JSON {
     public static final String KEY_ITEM_NAME = "itemName";
     public static final String KEY_ITEM_LIST = "itemList";
     public static final String KEY_OTHER_USER = "對方";
+    public static final String KEY_OTHER_USER_PERMISION = "是否允許請求所在位置";
 
 
     public static final String KEY_LOGIN_SUCCESS = "登入成功";
@@ -38,7 +39,7 @@ public class JSON {
     public static final int STATE_FIND_ITEM_LIST = 8 ;
     public static final int STATE_FIND_ITEM = 9 ;
     public static final int STATE_ASK_LOCATION_PERMISSION  = 10 ;
-
+    public static final int STATE_RETURN_ASK_LOCATION_PERMISSION = 11 ;
 
 
     public static final String MESSAGE_NOLOATION = "noLocation";
