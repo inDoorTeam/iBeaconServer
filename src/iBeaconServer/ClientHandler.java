@@ -135,9 +135,11 @@ public class ClientHandler implements Runnable {
                         JSONObject JSONObject = new JSONObject();
                         JSONObject.put(JSON.KEY_STATE, JSON.STATE_ASK_LOCATION_PERMISSION);
                         JSONObject.put(JSON.KEY_USER_NAME, client.getUserAccount());
-
-                        client.send(JSONObject.toString());
-
+                        String otherUser = receiveJSON.getString(JSON.KEY_OTHER_USER);
+                        for (User user: clientList){
+                            if(user.equals(otherUser))
+                                user.send(JSONObject.toString());
+                        }
                         break;
                     default:
                         System.out.println("");

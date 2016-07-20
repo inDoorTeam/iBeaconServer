@@ -17,6 +17,7 @@ public class JSON {
     public static final String KEY_TARGET_LOCATION = "targetLocation";
     public static final String KEY_ITEM_NAME = "itemName";
     public static final String KEY_ITEM_LIST = "itemList";
+    public static final String KEY_OTHER_USER = "對方";
 
 
     public static final String KEY_LOGIN_SUCCESS = "登入成功";
