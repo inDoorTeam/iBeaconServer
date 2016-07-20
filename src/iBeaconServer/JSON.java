@@ -11,7 +11,8 @@ public class JSON {
     public static final String KEY_RESULT = "result";
     public static final String KEY_RESULT_MESSAGE = "resultMessage";
     public static final String KEY_LOCATION = "LOCATION";
-    public static final String KEY_USER_LIST = "用戶清單";
+    public static final String KEY_FRIEND_LIST = "好友清單";
+    public static final String KEY_OTHERUSER_LIST = "其他用戶清單";
     public static final String KEY_BINDING = "BINDING";
     public static final String KEY_TARGET_LOCATION = "targetLocation";
     public static final String KEY_ITEM_NAME = "itemName";
@@ -36,5 +37,9 @@ public class JSON {
     public static final int STATE_FIND_ITEM_LIST = 8 ;
     public static final int STATE_FIND_ITEM = 9 ;
     public static final int STATE_ASK_LOCATION_PERMISSION  = 10 ;
+
+
+
+    public static final String MESSAGE_NOLOATION = "noLocation";
 
 }

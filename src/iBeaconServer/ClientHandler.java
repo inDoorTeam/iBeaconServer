@@ -76,16 +76,26 @@ public class ClientHandler implements Runnable {
                     case JSON.STATE_FIND_FRIEND:
                         JSONObject friendLocationJSONObject = new JSONObject();
                         JSONArray friendLocationJSONArray = new JSONArray();
+                        JSONArray otherUserJSONArray = new JSONArray();
                         friendLocationJSONObject.put(JSON.KEY_STATE, JSON.STATE_FIND_FRIEND);
-                        for(User u : clientList) {
-                            if (!u.getUserAccount().equals(client.getUserAccount())) {
+                        for(User u : clientList) { // 好友清單
+                            if (!u.getUserAccount().equals(client.getUserAccount()) && GuideDB.getInstance().isFriend(client, u)) {
                                 JSONObject JSONObject = new JSONObject();
                                 JSONObject.put(JSON.KEY_USER_NAME, u.getUserAccount());
-                                JSONObject.put(JSON.KEY_LOCATION, u.getUserLocation());
+                                if(null == u.getUserLocation())
+                                    JSONObject.put(JSON.KEY_LOCATION, JSON.MESSAGE_NOLOATION);
+                                else
+                                    JSONObject.put(JSON.KEY_LOCATION, u.getUserLocation());
                                 friendLocationJSONArray.put(JSONObject);
                             }
+                            else if(!u.getUserAccount().equals(client.getUserAccount())){ // 其他用戶
+                                JSONObject JSONObject = new JSONObject();
+                                JSONObject.put(JSON.KEY_USER_NAME, u.getUserAccount());
+                                otherUserJSONArray.put(JSONObject);
+                            }
                         }
-                        friendLocationJSONObject.put(JSON.KEY_USER_LIST, friendLocationJSONArray);
+                        friendLocationJSONObject.put(JSON.KEY_FRIEND_LIST, friendLocationJSONArray);
+                        friendLocationJSONObject.put(JSON.KEY_OTHERUSER_LIST, otherUserJSONArray);
                         System.out.println(friendLocationJSONObject);
                         client.send(friendLocationJSONObject.toString());
                         break;

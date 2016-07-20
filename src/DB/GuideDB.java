@@ -113,6 +113,42 @@ public class GuideDB {
             System.out.println("SelectDB Exception :" + e.toString());
         }
     }
+    public ArrayList<Member> getFriendListByUser(User user){
+        String sql = "SELECT * from User WHERE username = ?";
+        Member friend = null;
+        ArrayList<Member> friendList = null;
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, user.getUserAccount());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                if(friend == null)
+                    friend = new Member();
+                friend.setAccount(resultSet.getString("username"));
+                friendList.add(friend);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return friendList;
+
+    }
+    public boolean isFriend(User user, User otherUser){
+        String sql = "SELECT * from FriendShip WHERE user = ?";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, user.getUserAccount());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                if(otherUser.getUserAccount().equalsIgnoreCase(resultSet.getString("userfriend"))) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public int setOnlineTag(int isOnline, String account) {
         String sql = "UPDATE User SET OnlineTag = ? WHERE username = ?";
         int result = 0;
