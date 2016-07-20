@@ -35,6 +35,6 @@ public class JSON {
     public static final int STATE_FIND_TARGET_LOCATION = 7 ;
     public static final int STATE_FIND_ITEM_LIST = 8 ;
     public static final int STATE_FIND_ITEM = 9 ;
-    public static final int STATE_SEND_ASK_FOR_LOCATION = 10 ;
+    public static final int STATE_ASK_LOCATION_PERMISSION  = 10 ;
 
 }
