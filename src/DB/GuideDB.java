@@ -70,7 +70,7 @@ public class GuideDB {
     }
     public Member getMemberByUserAccountAndPsd(String userAccount, String userPwd) {
         userPwd = encryptPassword(userPwd);
-        String sql = "SELECT * FROM User WHERE username = binary ? AND password = ?";
+        String sql = "SELECT * FROM User WHERE username = binary ? AND password = binary ?";
         Member member = null;
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
