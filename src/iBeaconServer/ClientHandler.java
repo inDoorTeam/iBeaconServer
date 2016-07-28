@@ -199,6 +199,15 @@ public class ClientHandler implements Runnable {
                                 user.send(sendOSONObject.toString());
                             }
                         }
+                        break;
+                    case JSON.STATE_POST_ITEM:
+                        String LostLocation = receiveJSON.getString(JSON.KEY_LOCATION);
+                        String LostTime = receiveJSON.getString(JSON.KEY_LOST_TIME);
+                        String LostCost = receiveJSON.getString(JSON.KEY_LOST_COST);
+                        String LostDescription = receiveJSON.getString(JSON.KEY_LOST_DESCRIPTION);
+
+                        System.out.println("Lost item Location: " + LostLocation + "time: " + LostTime
+                            + "cost: " + LostCost + "description: " + LostDescription);
 
                         break;
                     default:

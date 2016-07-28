@@ -20,6 +20,9 @@ public class JSON {
     public static final String KEY_ITEM_LOCATION = "itemLocation";
     public static final String KEY_OTHER_USER = "對方";
     public static final String KEY_OTHER_USER_PERMISION = "是否允許請求所在位置";
+    public static final String KEY_LOST_TIME = "遺失時間";
+    public static final String KEY_LOST_COST = "懸賞金額";
+    public static final String KEY_LOST_DESCRIPTION = "遺失內容";
 
 
     public static final String KEY_LOGIN_SUCCESS = "登入成功";
@@ -42,7 +45,7 @@ public class JSON {
     public static final int STATE_ASK_LOCATION_PERMISSION = 10 ;
     public static final int STATE_RETURN_ASK_LOCATION_PERMISSION = 11 ;
     public static final int STATE_GET_ITEM_LOCATION = 12 ;
-
+    public static final int STATE_POST_ITEM = 13 ;
 
     public static final String MESSAGE_NOLOATION = "noLocation";
 
