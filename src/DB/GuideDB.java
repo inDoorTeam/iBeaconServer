@@ -25,7 +25,7 @@ public class GuideDB {
 
     public ArrayList<Item> getItemListByuser(User user){
 
-        String sql = "SELECT * FROM ItemList WHERE username = ?";
+        String sql = "SELECT * FROM ItemList WHERE username = binary ?";
 
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -134,7 +134,7 @@ public class GuideDB {
         }
     }
     public ArrayList<Member> getFriendListByUser(User user){
-        String sql = "SELECT * from User WHERE username = ?";
+        String sql = "SELECT * from User WHERE username = binary ?";
         Member friend = null;
         ArrayList<Member> friendList = null;
         try {
@@ -170,7 +170,7 @@ public class GuideDB {
         return false;
     }
     public int setOnlineTag(int isOnline, String account) {
-        String sql = "UPDATE User SET OnlineTag = ? WHERE username = ?";
+        String sql = "UPDATE User SET OnlineTag = ? WHERE username = binary ?";
         int result = 0;
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -186,7 +186,7 @@ public class GuideDB {
 
     }
     public int setItemLocation(Item item, String location) {
-        String sql = "UPDATE ItemList SET location = ? WHERE username = ?";
+        String sql = "UPDATE ItemList SET location = ? WHERE username = binary ?";
         int result = 0;
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
