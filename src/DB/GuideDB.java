@@ -25,7 +25,7 @@ public class GuideDB {
 
     public ArrayList<Item> getItemListByuser(User user){
 
-        String sql = "SELECT * FROM ItemList WHERE username = binary ?";
+        String sql = "SELECT * FROM ItemList WHERE username = ?";
 
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -70,7 +70,7 @@ public class GuideDB {
     }
     public Member getMemberByUserAccountAndPsd(String userAccount, String userPwd) {
         userPwd = encryptPassword(userPwd);
-        String sql = "SELECT * FROM User WHERE username = binary ? AND password = ?";
+        String sql = "SELECT * FROM User WHERE username = ? AND password = ?";
         Member member = null;
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -186,7 +186,7 @@ public class GuideDB {
 
     }
     public int setItemLocation(Item item, String location) {
-        String sql = "UPDATE ItemList SET location = ? WHERE username = binary ?";
+        String sql = "UPDATE ItemList SET location = ? WHERE username = ?";
         int result = 0;
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -216,5 +216,24 @@ public class GuideDB {
             System.out.println("SelectDB Exception :" + e.toString());
         }
 
+    }
+    public boolean isMyItem(User user, int minor){
+        String sql = "SELECT * FROM ItemList WHERE username = ? AND minor = ?";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+
+            preparedStatement.setString(1, user.getUserAccount());
+            preparedStatement.setString(2, minor+"");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                System.out.println(user.getUserAccount() + " has " + minor);
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(user.getUserAccount() + " doesnt have " + minor);
+        return false;
     }
 }

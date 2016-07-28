@@ -31,6 +31,8 @@ public class JSON {
     public static final String KEY_LOGOUT_FAIL = "登出失敗，請檢查網路連線並再嘗試一次";
 
 
+
+
     public static final String KEY_STATE = "STATE" ;
     public static final int STATE_LOGOUT = 0 ;
     public static final int STATE_SEND_IBEACON = 1 ;
@@ -45,6 +47,8 @@ public class JSON {
     public static final int STATE_ASK_LOCATION_PERMISSION = 10 ;
     public static final int STATE_RETURN_ASK_LOCATION_PERMISSION = 11 ;
     public static final int STATE_GET_ITEM_LOCATION = 12 ;
+    public static final int STATE_IS_MY_ITEM_OR_NOT = 14;
+    public static final int STATE_RETURN_IS_OR_NOT_MY_ITEM = 15;
     public static final int STATE_POST_ITEM = 13 ;
 
     public static final String MESSAGE_NOLOATION = "noLocation";
