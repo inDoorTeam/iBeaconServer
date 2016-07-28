@@ -210,6 +210,17 @@ public class ClientHandler implements Runnable {
                             + "cost: " + LostCost + "description: " + LostDescription);
 
                         break;
+                    case JSON.STATE_IS_MY_ITEM_OR_NOT:
+                        int isItMyItemMinor = receiveJSON.getInt(JSON.KEY_MINOR);
+                        System.out.println("Item minor :' " + isItMyItemMinor + " '\t");
+
+                        boolean isornot = GuideDB.getInstance().isMyItem(client, isItMyItemMinor);
+
+                        //JSONObject isornotJSONObject = new JSONObject();
+                        //isornotJSONObject.put(JSON.KEY_STATE, JSON.STATE_RETURN_IS_OR_NOT_MY_ITEM);
+                        //isornotJSONObject.put(JSON.KEY_OTHER_USER_PERMISION, isPermission);
+
+                        break;
                     default:
                         System.out.println("");
                         //do nothing..
