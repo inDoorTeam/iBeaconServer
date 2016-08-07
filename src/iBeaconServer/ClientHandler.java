@@ -18,6 +18,8 @@ public class ClientHandler implements Runnable {
     private User isCar = null;
     private ArrayList<User> clientList;
     private ArrayList<Item> itemList = new ArrayList<>();
+    //private ArrayList<Integer> LostItemList = new ArrayList<>();
+
 
     public ClientHandler(ArrayList<User> userList, User user) throws IOException {
         client = user;
@@ -34,6 +36,8 @@ public class ClientHandler implements Runnable {
             JSONObject receiveJSON = null;
             String receiveMessage;
             int status;
+
+            String preItemLocation = null;
             while(client.isConnected() && !client.isClose()) {
                 if(((receiveMessage = client.receive()) == null)) {
                     clientList.remove(client);
@@ -77,6 +81,9 @@ public class ClientHandler implements Runnable {
                         int itemRssi = receiveJSON.getInt(JSON.KEY_RSSI);
                         int itemMinor = receiveJSON.getInt(JSON.KEY_MINOR);
                         String itemLocation = receiveJSON.getString(JSON.KEY_LOCATION);
+
+
+
                         boolean hasItem = false;
                         for(Item item : itemList) {
                             if(itemMinor == item.getMinor()){
@@ -95,6 +102,38 @@ public class ClientHandler implements Runnable {
                             item.setLocation(itemLocation) ;
                             itemList.add(item);
                         }
+
+                        boolean flag = true;
+
+                        for (int lostItemM : Item.getLostItem()){
+                            System.out.println("Lost Item Moner: " + lostItemM);
+                        }
+
+
+
+                        for(int lostItem : Item.getLostItem()) {
+                            if (itemMinor == lostItem &&!(itemLocation.equals(preItemLocation))){
+                                System.out.println("Send item lacation to client.");
+                                JSONObject sendLostItemLocationJSONObject = new JSONObject();
+                                sendLostItemLocationJSONObject.put(JSON.KEY_STATE, JSON.STATE_SEND_LOST_ITEM_LOCATION);
+                                sendLostItemLocationJSONObject.put(JSON.KEY_MINOR, itemMinor);
+                                sendLostItemLocationJSONObject.put(JSON.KEY_LOCATION, itemLocation);
+                                for(User u : clientList) {
+                                    if(GuideDB.getInstance().isMyItem(u, lostItem)){
+                                        u.send(sendLostItemLocationJSONObject.toString());
+                                    }
+                                }
+
+                                preItemLocation = itemLocation;
+                                flag = false;
+                            }
+                        }
+
+
+                        if(flag){
+                            //preItemLocation = item.getLocation();
+                        }
+
 
                         break;
                     case JSON.STATE_GET_ITEM_LOCATION:
@@ -196,18 +235,25 @@ public class ClientHandler implements Runnable {
                         }
                         for (User user : clientList) {
                             if (user.getUserAccount().equals(username)) {
-                                user.send(sendOSONObject.toString());
                             }
                         }
                         break;
                     case JSON.STATE_POST_ITEM:
-                        String LostLocation = receiveJSON.getString(JSON.KEY_LOCATION);
+                        String LostItemName = receiveJSON.getString(JSON.KEY_ITEM_NAME);
                         String LostTime = receiveJSON.getString(JSON.KEY_LOST_TIME);
                         String LostCost = receiveJSON.getString(JSON.KEY_LOST_COST);
                         String LostDescription = receiveJSON.getString(JSON.KEY_LOST_DESCRIPTION);
 
-                        System.out.println("Lost item Location: " + LostLocation + "time: " + LostTime
-                            + "cost: " + LostCost + "description: " + LostDescription);
+                        System.out.println("Lost item : " + LostItemName + ", time: " + LostTime
+                            + ", cost: " + LostCost + ", description: " + LostDescription);
+
+                        for(Item item : itemList) {
+                            if(LostItemName.equals(item.getItemName()) && GuideDB.getInstance().isMyItem(client, item.getMinor())){
+                                Item.setLostItem(item.getMinor());
+                                item.setFlag(true);
+                            }
+
+                        }
 
                         break;
                     case JSON.STATE_IS_MY_ITEM_OR_NOT:
@@ -216,9 +262,28 @@ public class ClientHandler implements Runnable {
 
                         boolean isornot = GuideDB.getInstance().isMyItem(client, isItMyItemMinor);
 
-                        //JSONObject isornotJSONObject = new JSONObject();
-                        //isornotJSONObject.put(JSON.KEY_STATE, JSON.STATE_RETURN_IS_OR_NOT_MY_ITEM);
-                        //isornotJSONObject.put(JSON.KEY_OTHER_USER_PERMISION, isPermission);
+                        JSONObject isornotJSONObject = new JSONObject();
+                        isornotJSONObject.put(JSON.KEY_STATE, JSON.STATE_RETURN_IS_OR_NOT_MY_ITEM);
+                        isornotJSONObject.put(JSON.KEY_IS_MY_ITEM_OR_NOT, isornot);
+
+                        client.send(isornotJSONObject.toString());
+
+
+                        break;
+                    case JSON.STATE_FOUND_LOST_ITEM:
+                        int foundItem = receiveJSON.getInt(JSON.KEY_MINOR);
+                        for(Item item : itemList) {
+                            if(item.getMinor() == foundItem){
+                                item.setFlag(false);
+                            }
+                        }
+
+                        for(int item : Item.getLostItem()) {
+                            if ( foundItem == item){
+                                System.out.println("Find " + foundItem + ".");
+                                Item.removeLostItem(foundItem);
+                            }
+                        }
 
                         break;
                     default:

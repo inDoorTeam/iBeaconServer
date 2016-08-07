@@ -29,6 +29,8 @@ public class JSON {
     public static final String KEY_LOGOUT_SUCCESS = "登出成功";
     public static final String KEY_LOGIN_FAIL = "帳號密碼有誤";
     public static final String KEY_LOGOUT_FAIL = "登出失敗，請檢查網路連線並再嘗試一次";
+    public static final String KEY_IS_MY_ITEM_OR_NOT = "is my item or not";
+
 
 
 
@@ -50,6 +52,8 @@ public class JSON {
     public static final int STATE_IS_MY_ITEM_OR_NOT = 14;
     public static final int STATE_RETURN_IS_OR_NOT_MY_ITEM = 15;
     public static final int STATE_POST_ITEM = 13 ;
+    public static final int STATE_SEND_LOST_ITEM_LOCATION = 16;
+    public static final int STATE_FOUND_LOST_ITEM = 17;
 
     public static final String MESSAGE_NOLOATION = "noLocation";
 

@@ -1,5 +1,7 @@
 package iBeaconServer;
 
+import java.util.ArrayList;
+
 /**
  * Created by ccccurly on 2016/7/15.
  */
@@ -9,7 +11,8 @@ public class Item {
     private int Minor;
     private int Rssi;
     private String location;
-
+    private boolean flag = false; //flag = false, hold.true : lose.
+    private static ArrayList<Integer> lostItem;
 
     public String getItemName() {
         return itemName;
@@ -49,5 +52,30 @@ public class Item {
 
     public int getRssi() {
         return Rssi;
+    }
+
+    public void setFlag (boolean newFlag){
+        flag = newFlag;
+    }
+    public boolean getFlag(){
+        return flag;
+    }
+
+    public static void setLostItem(Integer newLostItem){
+        if (lostItem == null){
+            lostItem = new ArrayList<>();
+        }
+        lostItem.add(newLostItem);
+    }
+    public static ArrayList<Integer> getLostItem(){
+        if(lostItem == null){
+            lostItem = new ArrayList<>();
+        }
+        return lostItem;
+    }
+    public static void removeLostItem(Integer i){
+        if(lostItem.indexOf(i) != -1) {
+            lostItem.remove((Integer)lostItem.indexOf(i));
+        }
     }
 }

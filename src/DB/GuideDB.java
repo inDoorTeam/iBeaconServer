@@ -134,7 +134,7 @@ public class GuideDB {
         }
     }
     public ArrayList<Member> getFriendListByUser(User user){
-        String sql = "SELECT * from User WHERE username = binary ?";
+        String sql = "SELECT * from User WHERE username = ?";
         Member friend = null;
         ArrayList<Member> friendList = null;
         try {
@@ -170,7 +170,7 @@ public class GuideDB {
         return false;
     }
     public int setOnlineTag(int isOnline, String account) {
-        String sql = "UPDATE User SET OnlineTag = ? WHERE username = binary ?";
+        String sql = "UPDATE User SET OnlineTag = ? WHERE username = ?";
         int result = 0;
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -236,4 +236,5 @@ public class GuideDB {
         System.out.println(user.getUserAccount() + " doesnt have " + minor);
         return false;
     }
+
 }
