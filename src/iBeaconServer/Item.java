@@ -12,7 +12,7 @@ public class Item {
     private int Rssi;
     private String location;
     private boolean flag = false; //flag = false, hold.true : lose.
-    private static ArrayList<Integer> lostItem;
+    private static ArrayList<Item> lostItem;
 
     public String getItemName() {
         return itemName;
@@ -61,21 +61,20 @@ public class Item {
         return flag;
     }
 
-    public static void setLostItem(Integer newLostItem){
+    public static void setLostItem(Item newLostItem){
         if (lostItem == null){
             lostItem = new ArrayList<>();
         }
         lostItem.add(newLostItem);
     }
-    public static ArrayList<Integer> getLostItem(){
+    public static ArrayList<Item> getLostItem(){
         if(lostItem == null){
             lostItem = new ArrayList<>();
         }
         return lostItem;
     }
-    public static void removeLostItem(Integer i){
-        if(lostItem.indexOf(i) != -1) {
-            lostItem.remove((Integer)lostItem.indexOf(i));
-        }
+
+    public static void removeLostItem(Item i){
+        lostItem.remove(i);
     }
 }

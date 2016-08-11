@@ -105,21 +105,21 @@ public class ClientHandler implements Runnable {
 
                         boolean flag = true;
 
-                        for (int lostItemM : Item.getLostItem()){
-                            System.out.println("Lost Item Moner: " + lostItemM);
+                        for (Item lostItemM : Item.getLostItem()){
+                            System.out.println("Lost Item " + lostItemM);
                         }
 
 
 
-                        for(int lostItem : Item.getLostItem()) {
-                            if (itemMinor == lostItem &&!(itemLocation.equals(preItemLocation))){
+                        for (Item lostItem : Item.getLostItem()) {
+                            if (itemMinor == lostItem.getMinor() &&!(itemLocation.equals(preItemLocation))){
                                 System.out.println("Send item lacation to client.");
                                 JSONObject sendLostItemLocationJSONObject = new JSONObject();
                                 sendLostItemLocationJSONObject.put(JSON.KEY_STATE, JSON.STATE_SEND_LOST_ITEM_LOCATION);
                                 sendLostItemLocationJSONObject.put(JSON.KEY_MINOR, itemMinor);
                                 sendLostItemLocationJSONObject.put(JSON.KEY_LOCATION, itemLocation);
                                 for(User u : clientList) {
-                                    if(GuideDB.getInstance().isMyItem(u, lostItem)){
+                                    if(GuideDB.getInstance().isMyItem(u, lostItem.getMinor())){
                                         u.send(sendLostItemLocationJSONObject.toString());
                                     }
                                 }
@@ -249,7 +249,7 @@ public class ClientHandler implements Runnable {
 
                         for(Item item : itemList) {
                             if(LostItemName.equals(item.getItemName()) && GuideDB.getInstance().isMyItem(client, item.getMinor())){
-                                Item.setLostItem(item.getMinor());
+                                Item.setLostItem(item);
                                 item.setFlag(true);
                             }
 
@@ -278,10 +278,11 @@ public class ClientHandler implements Runnable {
                             }
                         }
 
-                        for(int item : Item.getLostItem()) {
-                            if ( foundItem == item){
+                        for(Item item : Item.getLostItem()) {
+                            if ( foundItem == item.getMinor()){
                                 System.out.println("Find " + foundItem + ".");
-                                Item.removeLostItem(foundItem);
+                                Item.removeLostItem(item);
+                                break;
                             }
                         }
 
