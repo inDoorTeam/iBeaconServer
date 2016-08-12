@@ -82,8 +82,6 @@ public class ClientHandler implements Runnable {
                         int itemMinor = receiveJSON.getInt(JSON.KEY_MINOR);
                         String itemLocation = receiveJSON.getString(JSON.KEY_LOCATION);
 
-
-
                         boolean hasItem = false;
                         for(Item item : itemList) {
                             if(itemMinor == item.getMinor()){
@@ -103,13 +101,21 @@ public class ClientHandler implements Runnable {
                             itemList.add(item);
                         }
 
-                        boolean flag = true;
+                        if(itemRssi < -70 && GuideDB.getInstance().isMyItem(client, itemMinor)){
+                            for(Item item : itemList) {
+                                if( itemMinor == item.getMinor() && item.getFlag() == false) {
+                                    System.out.println("Rssi : " + itemRssi + "遺失物 : " + item.getItemName());
+                                    JSONObject itemLostJSONObject = new JSONObject();
+                                    itemLostJSONObject.put(JSON.KEY_STATE, JSON.STATE_ITEM_RSSI_TOO_FAR);
+                                    itemLostJSONObject.put(JSON.KEY_ITEM_NAME, item.getItemName());
+                                    client.send(itemLostJSONObject.toString());
+                                }
+                            }
+                        }
 
                         for (Item lostItemM : Item.getLostItem()){
                             System.out.println("Lost Item " + lostItemM);
                         }
-
-
 
                         for (Item lostItem : Item.getLostItem()) {
                             if (itemMinor == lostItem.getMinor() &&!(itemLocation.equals(preItemLocation))){
@@ -125,15 +131,8 @@ public class ClientHandler implements Runnable {
                                 }
 
                                 preItemLocation = itemLocation;
-                                flag = false;
                             }
                         }
-
-
-                        if(flag){
-                            //preItemLocation = item.getLocation();
-                        }
-
 
                         break;
                     case JSON.STATE_GET_ITEM_LOCATION:
