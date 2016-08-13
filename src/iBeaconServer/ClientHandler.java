@@ -85,10 +85,15 @@ public class ClientHandler implements Runnable {
                         boolean hasItem = false;
                         for(Item item : itemList) {
                             if(itemMinor == item.getMinor()){
-                                if(itemRssi > item.getRssi()) {
-                                    System.out.println("itemRssi:" + itemRssi);
+                                if(!(itemLocation.equals(item.getLocation()))) {
+                                    if (itemRssi > item.getRssi()) {
+                                        System.out.println("itemRssi:" + itemRssi);
+                                        item.setRssi(itemRssi);
+                                        item.setLocation(itemLocation);
+                                    }
+                                }
+                                else {
                                     item.setRssi(itemRssi);
-                                    item.setLocation(itemLocation);
                                 }
                                 hasItem = true ;
                             }
@@ -99,6 +104,22 @@ public class ClientHandler implements Runnable {
                             item.setMinor(itemMinor) ;
                             item.setLocation(itemLocation) ;
                             itemList.add(item);
+                        }
+
+                        /* lost item change location */
+                        for(Item item : Item.getLostItem()){
+                            if(itemMinor == item.getMinor()){
+                                if(!(itemLocation.equals(item.getLocation()))) {
+                                    if (itemRssi > item.getRssi()) {
+                                        System.out.println("itemRssi:" + itemRssi);
+                                        item.setRssi(itemRssi);
+                                        item.setLocation(itemLocation);
+                                    }
+                                }
+                                else {
+                                    item.setRssi(itemRssi);
+                                }
+                            }
                         }
 
                         if(itemRssi < -70 && GuideDB.getInstance().isMyItem(client, itemMinor)){
@@ -123,7 +144,7 @@ public class ClientHandler implements Runnable {
                                 JSONObject sendLostItemLocationJSONObject = new JSONObject();
                                 sendLostItemLocationJSONObject.put(JSON.KEY_STATE, JSON.STATE_SEND_LOST_ITEM_LOCATION);
                                 sendLostItemLocationJSONObject.put(JSON.KEY_MINOR, itemMinor);
-                                sendLostItemLocationJSONObject.put(JSON.KEY_LOCATION, itemLocation);
+                                sendLostItemLocationJSONObject.put(JSON.KEY_LOCATION, lostItem.getLocation());
                                 for(User u : clientList) {
                                     if(GuideDB.getInstance().isMyItem(u, lostItem.getMinor())){
                                         u.send(sendLostItemLocationJSONObject.toString());
