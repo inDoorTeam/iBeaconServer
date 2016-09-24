@@ -307,6 +307,16 @@ public class ClientHandler implements Runnable {
                         }
 
                         break;
+                    case JSON.STATE_MOVE_TO_TARGET:
+                        String moveLocation = receiveJSON.getString(JSON.KEY_MOVE_TO_TARGET_LOCATION);
+                        String movePath = "LRL";
+                        JSONObject movePathJSONObject = new JSONObject();
+                        movePathJSONObject.put(JSON.KEY_STATE, JSON.STATE_MOVE_TO_TARGET_PATH);
+                        movePathJSONObject.put(JSON.KEY_MOVE_TO_TARGET_PATH, movePath);
+
+                        client.send(movePathJSONObject.toString());
+
+                        break;
                     default:
                         System.out.println("");
                         //do nothing..
