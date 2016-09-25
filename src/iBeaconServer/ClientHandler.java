@@ -20,7 +20,6 @@ public class ClientHandler implements Runnable {
     private ArrayList<Item> itemList = new ArrayList<>();
     //private ArrayList<Integer> LostItemList = new ArrayList<>();
 
-
     public ClientHandler(ArrayList<User> userList, User user) throws IOException {
         client = user;
         clientList = userList;
@@ -59,6 +58,27 @@ public class ClientHandler implements Runnable {
                         break;
                     case JSON.STATE_SEND_IBEACON:
                         String location = receiveJSON.getString(JSON.KEY_LOCATION);
+
+                        for (User u : clientList) {
+                            if ( u.getUserAccount().equalsIgnoreCase("wtf") ) {
+                                String movePath = "";
+                                if (client.getUserLocation() == null){
+                                    movePath = (new Dijkstra()).getPath("A", location);
+                                }
+                                else{
+                                    movePath = (new Dijkstra()).getPath(client.getUserLocation(), location);
+                                    System.out.println(client.getUserLocation()+ location);
+                                }
+                                System.out.println("movePath : " + movePath);
+
+                                JSONObject movePathJSONObject = new JSONObject();
+                                movePathJSONObject.put(JSON.KEY_STATE, JSON.STATE_MOVE_TO_TARGET_PATH);
+                                movePathJSONObject.put(JSON.KEY_MOVE_TO_TARGET_PATH, movePath);
+                                System.out.println("send " + movePathJSONObject.toString());
+                                u.send(movePathJSONObject.toString());
+                                break;
+                            }
+                        }
                         client.setUserLocation(location);
                         System.out.println(client.getUserAccount() + " in " + location);
                         JSONObject locationChangeJSONObject = new JSONObject();
@@ -308,14 +328,24 @@ public class ClientHandler implements Runnable {
 
                         break;
                     case JSON.STATE_MOVE_TO_TARGET:
-                        String moveLocation = receiveJSON.getString(JSON.KEY_MOVE_TO_TARGET_LOCATION);
-                        String movePath = "LRL";
-                        JSONObject movePathJSONObject = new JSONObject();
-                        movePathJSONObject.put(JSON.KEY_STATE, JSON.STATE_MOVE_TO_TARGET_PATH);
-                        movePathJSONObject.put(JSON.KEY_MOVE_TO_TARGET_PATH, movePath);
 
-                        client.send(movePathJSONObject.toString());
+                        //if( client.getUserAccount().equalsIgnoreCase("curly") ) {
+                            String moveLocation = receiveJSON.getString(JSON.KEY_MOVE_TO_TARGET_LOCATION);
+                            String movePath = (new Dijkstra()).getPath("A", moveLocation);
+                            System.out.println("movePath : " + movePath);
+                            System.out.println("receive " + receiveJSON.toString());
 
+                            for (User u : clientList) {
+                                if ( u.getUserAccount().equalsIgnoreCase("wtf") ) {
+                                    JSONObject movePathJSONObject = new JSONObject();
+                                    movePathJSONObject.put(JSON.KEY_STATE, JSON.STATE_MOVE_TO_TARGET_PATH);
+                                    movePathJSONObject.put(JSON.KEY_MOVE_TO_TARGET_PATH, movePath);
+                                    System.out.println("send " + movePathJSONObject.toString());
+                                    u.send(movePathJSONObject.toString());
+                                    break;
+                                }
+                            }
+                        //}
                         break;
                     default:
                         System.out.println("");
