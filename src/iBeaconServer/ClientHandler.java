@@ -18,6 +18,8 @@ public class ClientHandler implements Runnable {
     private User isCar = null;
     private ArrayList<User> clientList;
     private ArrayList<Item> itemList = new ArrayList<>();
+    private String lastPoint = "";
+    private Dijkstra dijkstra = new Dijkstra();
     //private ArrayList<Integer> LostItemList = new ArrayList<>();
 
     public ClientHandler(ArrayList<User> userList, User user) throws IOException {
@@ -63,10 +65,10 @@ public class ClientHandler implements Runnable {
                             if ( u.getUserAccount().equalsIgnoreCase("wtf") ) {
                                 String movePath = "";
                                 if (client.getUserLocation() == null){
-                                    movePath = (new Dijkstra()).getPath("A", location);
+                                    movePath = dijkstra.getPath("A", location);
                                 }
                                 else{
-                                    movePath = (new Dijkstra()).getPath(client.getUserLocation(), location);
+                                    movePath = dijkstra.getPath(client.getUserLocation(), location);
                                     System.out.println(client.getUserLocation()+ location);
                                 }
                                 System.out.println("movePath : " + movePath);
@@ -331,7 +333,7 @@ public class ClientHandler implements Runnable {
 
                         //if( client.getUserAccount().equalsIgnoreCase("curly") ) {
                             String moveLocation = receiveJSON.getString(JSON.KEY_MOVE_TO_TARGET_LOCATION);
-                            String movePath = (new Dijkstra()).getPath("A", moveLocation);
+                            String movePath = dijkstra.getPath("A", moveLocation);
                             System.out.println("movePath : " + movePath);
                             System.out.println("receive " + receiveJSON.toString());
 

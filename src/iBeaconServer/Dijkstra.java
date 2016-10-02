@@ -14,6 +14,7 @@ public class Dijkstra {
     private Vertex D = null;
     private Vertex E = null;
     private Vertex F = null;
+    private String lastPoint = "";
 
     public Dijkstra() {
         A = new Vertex("A");
@@ -25,10 +26,12 @@ public class Dijkstra {
 
         // set the edges and weight
         A.adjacencies = new Edge[]{new Edge(B, 2), new Edge(F, 3)};
-        B.adjacencies = new Edge[]{new Edge(C, 2), new Edge(A, 2), new Edge(E, 3)};
+        B.adjacencies = new Edge[]{new Edge(C, 2), new Edge(A, 2)};
+        //B.adjacencies = new Edge[]{new Edge(C, 2), new Edge(A, 2), new Edge(E, 3)};
         C.adjacencies = new Edge[]{new Edge(D, 3), new Edge(B, 2)};
         D.adjacencies = new Edge[]{new Edge(E, 2), new Edge(C, 3)};
-        E.adjacencies = new Edge[]{new Edge(F, 2), new Edge(D, 2), new Edge(B, 3)};
+        //E.adjacencies = new Edge[]{new Edge(F, 2), new Edge(D, 2), new Edge(B, 3)};
+        E.adjacencies = new Edge[]{new Edge(F, 2), new Edge(D, 2)};
         F.adjacencies = new Edge[]{new Edge(A, 3), new Edge(E, 2)};
     }
 
@@ -48,6 +51,9 @@ public class Dijkstra {
         for(i = 0 ; i < path.size() ; i ++ ){
             carPath = carPath + path.get(i);
         }
+        carPath = lastPoint + carPath ;
+        lastPoint = carPath.substring( carPath.length() - 2, carPath.length() - 1 );
+        System.out.println("lastPoint: " + lastPoint);
         if( carPath.length() >= 3){
             for(i = 0 ; i <= carPath.length() - 3 ; i ++ ){
                 carCommand = carCommand + getCommand(carPath.substring( i , i + 3)) ;
@@ -61,13 +67,12 @@ public class Dijkstra {
                 carCommand = "R";
             }
         }
+        initialVertex();
         return carCommand ;
     }
     public String getCommand(String path){
         switch (path){
-            case "ABC":
-                return "UU";
-            case "CBA":case "DEF":case "FED":
+            case "ABC":case "CBA":case "DEF":case "FED":
                 return "U";
             case "ABE":
                 return "UR";
@@ -100,14 +105,14 @@ public class Dijkstra {
     }
 
     static class Vertex implements Comparable<Vertex> {
-        public final String name;
-        public Edge[] adjacencies;
-        public double minDistance = Double.POSITIVE_INFINITY;
-        public Vertex previous;
-        public Vertex(String argName) { name = argName; }
-        public String toString() { return name; }
+        public final String name ;
+        public Edge[] adjacencies ;
+        public double minDistance = Double.POSITIVE_INFINITY ;
+        public Vertex previous ;
+        public Vertex(String argName) { name = argName ; }
+        public String toString() { return name ; }
         public int compareTo(Vertex other) {
-            return Double.compare(minDistance, other.minDistance);
+            return Double.compare(minDistance, other.minDistance ) ;
         }
     }
 
@@ -148,6 +153,20 @@ public class Dijkstra {
         }
         Collections.reverse(path);
         return path;
+    }
+    public void initialVertex(){
+        A.minDistance = Double.POSITIVE_INFINITY;
+        A.previous = null;
+        B.minDistance = Double.POSITIVE_INFINITY;
+        B.previous = null;
+        C.minDistance = Double.POSITIVE_INFINITY;
+        C.previous = null;
+        D.minDistance = Double.POSITIVE_INFINITY;
+        D.previous = null;
+        E.minDistance = Double.POSITIVE_INFINITY;
+        E.previous = null;
+        F.minDistance = Double.POSITIVE_INFINITY;
+        F.previous = null;
     }
 
 }
