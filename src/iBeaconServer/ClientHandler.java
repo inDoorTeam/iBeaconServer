@@ -20,6 +20,7 @@ public class ClientHandler implements Runnable {
     private ArrayList<Item> itemList = new ArrayList<>();
     private String lastPoint = "";
     private Dijkstra dijkstra = new Dijkstra();
+    private String carLocation = "";
     //private ArrayList<Integer> LostItemList = new ArrayList<>();
 
     public ClientHandler(ArrayList<User> userList, User user) throws IOException {
@@ -71,6 +72,7 @@ public class ClientHandler implements Runnable {
                                     movePath = dijkstra.getPath(client.getUserLocation(), movelocation);
                                     System.out.println(client.getUserLocation() + movelocation);
                                 }
+                                carLocation = movelocation ;
                                 System.out.println("movePath : " + movePath);
 
                                 JSONObject movePathJSONObject = new JSONObject();
@@ -335,13 +337,14 @@ public class ClientHandler implements Runnable {
                             String moveLocation = receiveJSON.getString(JSON.KEY_MOVE_TO_TARGET_LOCATION);
 
                             String movePath = "";
-                            if (client.getUserLocation() == null){
+                            if (carLocation.equals("")){
                                 movePath = dijkstra.getPath("A", moveLocation);
                             }
                             else{
-                                movePath = dijkstra.getPath(client.getUserLocation(), moveLocation);
+                                movePath = dijkstra.getPath(carLocation, moveLocation);
                                 System.out.println(client.getUserLocation()+ moveLocation);
                             }
+                            carLocation = moveLocation ;
                             System.out.println("movePath : " + movePath);
                             System.out.println("receive " + receiveJSON.toString());
 

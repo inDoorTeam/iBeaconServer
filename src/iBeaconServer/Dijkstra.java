@@ -25,14 +25,14 @@ public class Dijkstra {
         F = new Vertex("F");
 
         // set the edges and weight
-        A.adjacencies = new Edge[]{new Edge(B, 2), new Edge(F, 3)};
-        B.adjacencies = new Edge[]{new Edge(C, 2), new Edge(A, 2)};
-        //B.adjacencies = new Edge[]{new Edge(C, 2), new Edge(A, 2), new Edge(E, 3)};
-        C.adjacencies = new Edge[]{new Edge(D, 3), new Edge(B, 2)};
-        D.adjacencies = new Edge[]{new Edge(E, 2), new Edge(C, 3)};
-        //E.adjacencies = new Edge[]{new Edge(F, 2), new Edge(D, 2), new Edge(B, 3)};
-        E.adjacencies = new Edge[]{new Edge(F, 2), new Edge(D, 2)};
-        F.adjacencies = new Edge[]{new Edge(A, 3), new Edge(E, 2)};
+        A.adjacencies = new Edge[]{new Edge(B, 3), new Edge(F, 3)};
+        B.adjacencies = new Edge[]{new Edge(C, 3), new Edge(A, 3)};
+        //B.adjacencies = new Edge[]{new Edge(C, 3), new Edge(A, 3), new Edge(E, 3)};
+        C.adjacencies = new Edge[]{new Edge(D, 3), new Edge(B, 3)};
+        D.adjacencies = new Edge[]{new Edge(E, 3), new Edge(C, 3)};
+        //E.adjacencies = new Edge[]{new Edge(F, 3), new Edge(D, 3), new Edge(B, 3)};
+        E.adjacencies = new Edge[]{new Edge(F, 3), new Edge(D, 3)};
+        F.adjacencies = new Edge[]{new Edge(A, 3), new Edge(E, 3)};
     }
 
     public String getPath(String start, String end){
@@ -54,6 +54,7 @@ public class Dijkstra {
         carPath = lastPoint + carPath ;
         lastPoint = carPath.substring( carPath.length() - 2, carPath.length() - 1 );
         System.out.println("lastPoint: " + lastPoint);
+
         if( carPath.length() >= 3){
             for(i = 0 ; i <= carPath.length() - 3 ; i ++ ){
                 carCommand = carCommand + getCommand(carPath.substring( i , i + 3)) ;
@@ -67,6 +68,7 @@ public class Dijkstra {
                 carCommand = "R";
             }
         }
+
         initialVertex();
         return carCommand ;
     }
@@ -74,12 +76,12 @@ public class Dijkstra {
         switch (path){
             case "ABC":case "CBA":case "DEF":case "FED":
                 return "U";
-            case "ABE":
-                return "UR";
-            case "BEF":case "BCD":case "CDE":case "DEB":case "EBC":case "EFA":case "FAB":
+            case "ABE":case "BEF":case "BCD":case "CDE":case "DEB":case "EBC":case "EFA":case "FAB":
                 return "R";
             case "EBA":case "FEB":case "DCB":case "EDC":case "BED":case "CBE":case "AFE":case "BAF":
                 return "L";
+            case "ABA":case "AFA":case "BAB":case "BCB":case "CBC":case "CDC":case "DCD":case "DED":case "EDE":case "EFE":case "FEF":case "FAF":
+                return "D";
             default:
                 return "";
         }
@@ -87,17 +89,17 @@ public class Dijkstra {
 
     public Vertex getVertex(String loc){
         switch (loc){
-            case "A":
+            case "A":case "化妝品":
                 return A;
-            case "B":case "資電201 - 資訊系辦公室":
+            case "B":case "生活用品B":
                 return B;
-            case "C":
+            case "C":case "餅乾":
                 return C;
-            case "D":case "資電214":
+            case "D":case "調理食品":
                 return D;
-            case "E":
+            case "E":case "廚具":
                 return E;
-            case "F":case "資電234 - 網際網路及軟體工程學程實驗室":
+            case "F":case "電視":
                 return F;
             default:
                 return null;
