@@ -39,7 +39,6 @@ public class Dijkstra {
         Vertex startPoint = getVertex(start) ;
         Vertex endPoint = getVertex(end) ;
 
-        System.out.println("2222" + startPoint.toString() + endPoint.toString());
         computePaths(startPoint);
         System.out.println(start + " to " + end + ": " + endPoint.minDistance);
         List<Vertex> path = getShortestPathTo(endPoint);
@@ -52,8 +51,12 @@ public class Dijkstra {
             carPath = carPath + path.get(i);
         }
         carPath = lastPoint + carPath ;
+        if( lastPoint.equals("") ){
+            carCommand = "U";
+        }
+
         lastPoint = carPath.substring( carPath.length() - 2, carPath.length() - 1 );
-        System.out.println("lastPoint: " + lastPoint);
+        //System.out.println("lastPoint: " + lastPoint);
 
         if( carPath.length() >= 3){
             for(i = 0 ; i <= carPath.length() - 3 ; i ++ ){

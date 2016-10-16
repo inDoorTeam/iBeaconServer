@@ -66,11 +66,10 @@ public class ClientHandler implements Runnable {
                             if ( u.getUserAccount().equalsIgnoreCase("wtf") ) {
                                 String movePath = "";
                                 if (client.getUserLocation() == null){
-                                    movePath = dijkstra.getPath("A", movelocation);
+                                    movePath = dijkstra.getPath("化妝品", movelocation);
                                 }
                                 else{
                                     movePath = dijkstra.getPath(client.getUserLocation(), movelocation);
-                                    System.out.println(client.getUserLocation() + movelocation);
                                 }
                                 carLocation = movelocation ;
                                 System.out.println("movePath : " + movePath);
@@ -338,11 +337,10 @@ public class ClientHandler implements Runnable {
 
                             String movePath = "";
                             if (carLocation.equals("")){
-                                movePath = dijkstra.getPath("A", moveLocation);
+                                movePath = dijkstra.getPath("化妝品", moveLocation);
                             }
                             else{
                                 movePath = dijkstra.getPath(carLocation, moveLocation);
-                                System.out.println(client.getUserLocation()+ moveLocation);
                             }
                             carLocation = moveLocation ;
                             System.out.println("movePath : " + movePath);
