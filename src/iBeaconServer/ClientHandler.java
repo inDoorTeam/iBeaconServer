@@ -59,17 +59,17 @@ public class ClientHandler implements Runnable {
                         logoutHandler();
                         break;
                     case JSON.STATE_SEND_IBEACON:
-                        String location = receiveJSON.getString(JSON.KEY_LOCATION);
+                        String movelocation = receiveJSON.getString(JSON.KEY_LOCATION);
 
                         for (User u : clientList) {
                             if ( u.getUserAccount().equalsIgnoreCase("wtf") ) {
                                 String movePath = "";
                                 if (client.getUserLocation() == null){
-                                    movePath = dijkstra.getPath("A", location);
+                                    movePath = dijkstra.getPath("A", movelocation);
                                 }
                                 else{
-                                    movePath = dijkstra.getPath(client.getUserLocation(), location);
-                                    System.out.println(client.getUserLocation()+ location);
+                                    movePath = dijkstra.getPath(client.getUserLocation(), movelocation);
+                                    System.out.println(client.getUserLocation() + movelocation);
                                 }
                                 System.out.println("movePath : " + movePath);
 
@@ -81,15 +81,15 @@ public class ClientHandler implements Runnable {
                                 break;
                             }
                         }
-                        client.setUserLocation(location);
-                        System.out.println(client.getUserAccount() + " in " + location);
+                        client.setUserLocation(movelocation);
+                        System.out.println(client.getUserAccount() + " in " + movelocation);
                         JSONObject locationChangeJSONObject = new JSONObject();
 
                         for(User u : clientList){
                             if( u.getBindingState() && !u.equals(client)) {
                                 System.out.println(u.getUserAccount() + " is Binding");
                                 locationChangeJSONObject.put(JSON.KEY_STATE, JSON.STATE_USER_MOVE);
-                                locationChangeJSONObject.put(JSON.KEY_TARGET_LOCATION, location);
+                                locationChangeJSONObject.put(JSON.KEY_TARGET_LOCATION, movelocation);
                                 locationChangeJSONObject.put(JSON.KEY_RESULT, JSON.KEY_RESULT_MESSAGE);
                                 u.send(locationChangeJSONObject.toString());
                                 //System.out.println("send : " + locationChangeJSONObject.toString());
@@ -333,7 +333,15 @@ public class ClientHandler implements Runnable {
 
                         //if( client.getUserAccount().equalsIgnoreCase("curly") ) {
                             String moveLocation = receiveJSON.getString(JSON.KEY_MOVE_TO_TARGET_LOCATION);
-                            String movePath = dijkstra.getPath("A", moveLocation);
+
+                            String movePath = "";
+                            if (client.getUserLocation() == null){
+                                movePath = dijkstra.getPath("A", moveLocation);
+                            }
+                            else{
+                                movePath = dijkstra.getPath(client.getUserLocation(), moveLocation);
+                                System.out.println(client.getUserLocation()+ moveLocation);
+                            }
                             System.out.println("movePath : " + movePath);
                             System.out.println("receive " + receiveJSON.toString());
 
