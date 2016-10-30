@@ -11,6 +11,7 @@ public class Item {
     private int Minor;
     private int Rssi;
     private String location;
+    private String prelocation = null;
     private boolean flag = false; //flag = false, hold.true : lose.
     private static ArrayList<Item> lostItem;
 
@@ -42,9 +43,19 @@ public class Item {
         return location;
     }
 
+    public String getPreLocation() {
+        return prelocation;
+    }
+
+
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public void setPreLocation(String location) {
+        this.prelocation = location;
+    }
+
 
     public void setRssi(int rssi) {
         Rssi = rssi;
