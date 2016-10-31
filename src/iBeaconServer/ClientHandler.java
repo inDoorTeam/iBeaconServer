@@ -145,7 +145,7 @@ public class ClientHandler implements Runnable {
                             }
                         }
 
-                        if(itemRssi < -70 && GuideDB.getInstance().isMyItem(client, itemMinor)){
+                        if(itemRssi < -55 && GuideDB.getInstance().isMyItem(client, itemMinor)){
                             for(Item item : itemList) {
                                 if( itemMinor == item.getMinor() && item.getFlag() == false) {
                                     System.out.println("Rssi : " + itemRssi + "遺失物 : " + item.getItemName());
@@ -162,7 +162,7 @@ public class ClientHandler implements Runnable {
                         }
 
                         for (Item lostItem : Item.getLostItem()) {
-                            if (itemMinor == lostItem.getMinor() &&!(itemLocation.equals(preItemLocation))){
+                            if (itemMinor == lostItem.getMinor() && !(lostItem.getLocation().equals(lostItem.getPreLocation()))){
                                 System.out.println("Send item lacation to client.");
                                 JSONObject sendLostItemLocationJSONObject = new JSONObject();
                                 sendLostItemLocationJSONObject.put(JSON.KEY_STATE, JSON.STATE_SEND_LOST_ITEM_LOCATION);
@@ -173,8 +173,7 @@ public class ClientHandler implements Runnable {
                                         u.send(sendLostItemLocationJSONObject.toString());
                                     }
                                 }
-
-                                preItemLocation = itemLocation;
+                                lostItem.setPreLocation(itemLocation);
                             }
                         }
 
@@ -278,6 +277,7 @@ public class ClientHandler implements Runnable {
                         }
                         for (User user : clientList) {
                             if (user.getUserAccount().equals(username)) {
+                                user.send(sendOSONObject.toString());
                             }
                         }
                         break;
