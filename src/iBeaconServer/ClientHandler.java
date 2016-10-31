@@ -68,7 +68,7 @@ public class ClientHandler implements Runnable {
                                 if (client.getUserLocation() == null){
                                     movePath = dijkstra.getPath("入口", movelocation);
                                 }
-                                else{
+                                else if(!client.getUserLocation().equalsIgnoreCase(movelocation)){
                                     movePath = dijkstra.getPath(client.getUserLocation(), movelocation);
                                 }
                                 carLocation = movelocation ;
@@ -339,7 +339,7 @@ public class ClientHandler implements Runnable {
                             if (carLocation.equals("")){
                                 movePath = dijkstra.getPath("入口", moveLocation);
                             }
-                            else{
+                            else if(!carLocation.equalsIgnoreCase(moveLocation)){
                                 movePath = dijkstra.getPath(carLocation, moveLocation);
                             }
                             carLocation = moveLocation ;
