@@ -21,6 +21,7 @@ public class ClientHandler implements Runnable {
     private String lastPoint = "";
     private Dijkstra dijkstra = new Dijkstra();
     private String carLocation = "";
+    String movePath = "";
     private Boolean autoFollowFlag = false;
     //private ArrayList<Integer> LostItemList = new ArrayList<>();
 
@@ -63,17 +64,17 @@ public class ClientHandler implements Runnable {
                     case JSON.STATE_SEND_IBEACON:
                         String movelocation = receiveJSON.getString(JSON.KEY_LOCATION);
                         if( autoFollowFlag == true ) {
+                            movePath = "";
+                            if (client.getUserLocation() == null) {
+                                movePath = dijkstra.getPath("入口", movelocation);
+                            } else if (!client.getUserLocation().equalsIgnoreCase(movelocation)) {
+                                movePath = dijkstra.getPath(client.getUserLocation(), movelocation);
+                            }
+                            carLocation = movelocation;
+                            System.out.println("movePath : " + movePath);
+
                             for (User u : clientList) {
                                 if (u.getUserAccount().equalsIgnoreCase("wtf")) {
-                                    String movePath = "";
-                                    if (client.getUserLocation() == null) {
-                                        movePath = dijkstra.getPath("入口", movelocation);
-                                    } else if (!client.getUserLocation().equalsIgnoreCase(movelocation)) {
-                                        movePath = dijkstra.getPath(client.getUserLocation(), movelocation);
-                                    }
-                                    carLocation = movelocation;
-                                    System.out.println("movePath : " + movePath);
-
                                     JSONObject movePathJSONObject = new JSONObject();
                                     movePathJSONObject.put(JSON.KEY_STATE, JSON.STATE_MOVE_TO_TARGET_PATH);
                                     movePathJSONObject.put(JSON.KEY_MOVE_TO_TARGET_PATH, movePath);
@@ -335,8 +336,7 @@ public class ClientHandler implements Runnable {
 
                         //if( client.getUserAccount().equalsIgnoreCase("curly") ) {
                             String moveLocation = receiveJSON.getString(JSON.KEY_MOVE_TO_TARGET_LOCATION);
-
-                            String movePath = "";
+                            movePath = "";
                             if (carLocation.equals("")){
                                 movePath = dijkstra.getPath("入口", moveLocation);
                             }
@@ -362,6 +362,22 @@ public class ClientHandler implements Runnable {
                     case JSON.STATE_AUTO_FOLLOW:
                         if(autoFollowFlag == false){
                             autoFollowFlag = true;
+                            if( !client.getUserLocation().equals(carLocation) ){
+                                movePath = dijkstra.getPath(carLocation, client.getUserLocation());
+                                carLocation = client.getUserLocation();
+                                System.out.println("movePath : " + movePath);
+
+                                for (User u : clientList) {
+                                    if (u.getUserAccount().equalsIgnoreCase("wtf")) {
+                                        JSONObject movePathJSONObject = new JSONObject();
+                                        movePathJSONObject.put(JSON.KEY_STATE, JSON.STATE_MOVE_TO_TARGET_PATH);
+                                        movePathJSONObject.put(JSON.KEY_MOVE_TO_TARGET_PATH, movePath);
+                                        System.out.println("send " + movePathJSONObject.toString());
+                                        u.send(movePathJSONObject.toString());
+                                        break;
+                                    }
+                                }
+                            }
                         }
                         else{
                             autoFollowFlag = false;
