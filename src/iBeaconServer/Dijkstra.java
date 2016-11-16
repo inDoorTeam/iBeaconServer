@@ -89,11 +89,11 @@ public class Dijkstra {
                 return "F";
             case "BAD":case "DFG":case "FGB":case "GBA":case "EFD":case "FDC":case "DCE":case "CEF":
             case "HIF":case "IFE":case "FEH":case "EHI":case "IJG":case "JGF":case "GFI":case "FIJ":
-            case "KLI":case "LIH":case "IHK":case "HKL":case "LMJ":case "MJI":case "JIL":case "ILM":
+            case "KLI":case "LIH":case "IHK":case "HKL":case "LMJ":case "MJI":case "JIL":case "ILM":case"CDA":
                 return "R";
             case "DAB":case "GFD":case "BGF":case "ABG":case "DFE":case "CDF":case "ECD":case "FEC":
             case "FIH":case "EFI":case "HEF":case "IHE":case "GJI":case "FGJ":case "IFG":case "JIF":
-            case "ILK":case "HIL":case "KHI":case "LKH":case "JML":case "IJM":case "LIJ":case "MLI":
+            case "ILK":case "HIL":case "KHI":case "LKH":case "JML":case "IJM":case "LIJ":case "MLI":case"ADC":
                 return "L";
             case "ABA":case "ADA":case "BAB":case "BGB":case "CDC":case "CEC":case "DAD":case "DCD":case "DFD":
             case "ECE":case "EFE":case "EHE":case "FDF":case "FEF":case "FGF":case "FIF":case "GBG":case "GFG":case "GJG":
