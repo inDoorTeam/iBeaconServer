@@ -20,7 +20,7 @@ public class ClientHandler implements Runnable {
     private ArrayList<Item> itemList = new ArrayList<>();
     private String lastPoint = "";
     private Dijkstra dijkstra = new Dijkstra();
-    private String carLocation = "";
+    private String carLocation = "入口";
     String movePath = "";
     private Boolean autoFollowFlag = false;
     //private ArrayList<Integer> LostItemList = new ArrayList<>();
@@ -63,27 +63,7 @@ public class ClientHandler implements Runnable {
                         break;
                     case JSON.STATE_SEND_IBEACON:
                         String movelocation = receiveJSON.getString(JSON.KEY_LOCATION);
-                        if( autoFollowFlag == true ) {
-                            movePath = "";
-                            if (client.getUserLocation() == null) {
-                                movePath = dijkstra.getPath("入口", movelocation);
-                            } else if (!client.getUserLocation().equalsIgnoreCase(movelocation)) {
-                                movePath = dijkstra.getPath(client.getUserLocation(), movelocation);
-                            }
-                            carLocation = movelocation;
-                            System.out.println("movePath : " + movePath);
 
-                            for (User u : clientList) {
-                                if (u.getUserAccount().equalsIgnoreCase("wtf")) {
-                                    JSONObject movePathJSONObject = new JSONObject();
-                                    movePathJSONObject.put(JSON.KEY_STATE, JSON.STATE_MOVE_TO_TARGET_PATH);
-                                    movePathJSONObject.put(JSON.KEY_MOVE_TO_TARGET_PATH, movePath);
-                                    System.out.println("send " + movePathJSONObject.toString());
-                                    u.send(movePathJSONObject.toString());
-                                    break;
-                                }
-                            }
-                        }
                         client.setUserLocation(movelocation);
                         System.out.println(client.getUserAccount() + " in " + movelocation);
                         JSONObject locationChangeJSONObject = new JSONObject();
@@ -100,6 +80,24 @@ public class ClientHandler implements Runnable {
                                 break;
                             }
                         }
+
+                        if( autoFollowFlag == true && !carLocation.equals(client.getUserLocation()) ) {
+                            movePath = dijkstra.getPath(carLocation, client.getUserLocation());
+                            carLocation = client.getUserLocation();
+                            System.out.println("movePath : " + movePath);
+
+                            for (User u : clientList) {
+                                if (u.getUserAccount().equalsIgnoreCase("car")) {
+                                    JSONObject movePathJSONObject = new JSONObject();
+                                    movePathJSONObject.put(JSON.KEY_STATE, JSON.STATE_MOVE_TO_TARGET_PATH);
+                                    movePathJSONObject.put(JSON.KEY_MOVE_TO_TARGET_PATH, movePath);
+                                    System.out.println("send " + movePathJSONObject.toString());
+                                    u.send(movePathJSONObject.toString());
+                                    break;
+                                }
+                            }
+                        }
+
                         break;
                     case JSON.STATE_SEND_ITEM_IBEACON:
                         System.out.println(receiveJSON.toString());
@@ -336,25 +334,21 @@ public class ClientHandler implements Runnable {
 
                         //if( client.getUserAccount().equalsIgnoreCase("curly") ) {
                             String moveLocation = receiveJSON.getString(JSON.KEY_MOVE_TO_TARGET_LOCATION);
-                            movePath = "";
-                            if (carLocation.equals("")){
-                                movePath = dijkstra.getPath("入口", moveLocation);
-                            }
-                            else if(!carLocation.equalsIgnoreCase(moveLocation)){
-                                movePath = dijkstra.getPath(carLocation, moveLocation);
-                            }
-                            carLocation = moveLocation ;
-                            System.out.println("movePath : " + movePath);
-                            System.out.println("receive " + receiveJSON.toString());
 
-                            for (User u : clientList) {
-                                if ( u.getUserAccount().equalsIgnoreCase("wtf") ) {
-                                    JSONObject movePathJSONObject = new JSONObject();
-                                    movePathJSONObject.put(JSON.KEY_STATE, JSON.STATE_MOVE_TO_TARGET_PATH);
-                                    movePathJSONObject.put(JSON.KEY_MOVE_TO_TARGET_PATH, movePath);
-                                    System.out.println("send " + movePathJSONObject.toString());
-                                    u.send(movePathJSONObject.toString());
-                                    break;
+                            if ( !carLocation.equalsIgnoreCase(moveLocation) ) {
+                                movePath = dijkstra.getPath(carLocation, moveLocation);
+                                carLocation = moveLocation;
+                                System.out.println("movePath : " + movePath);
+
+                                for (User u : clientList) {
+                                    if (u.getUserAccount().equalsIgnoreCase("car")) {
+                                        JSONObject movePathJSONObject = new JSONObject();
+                                        movePathJSONObject.put(JSON.KEY_STATE, JSON.STATE_MOVE_TO_TARGET_PATH);
+                                        movePathJSONObject.put(JSON.KEY_MOVE_TO_TARGET_PATH, movePath);
+                                        System.out.println("send " + movePathJSONObject.toString());
+                                        u.send(movePathJSONObject.toString());
+                                        break;
+                                    }
                                 }
                             }
                         //}
@@ -368,7 +362,7 @@ public class ClientHandler implements Runnable {
                                 System.out.println("movePath : " + movePath);
 
                                 for (User u : clientList) {
-                                    if (u.getUserAccount().equalsIgnoreCase("wtf")) {
+                                    if (u.getUserAccount().equalsIgnoreCase("car")) {
                                         JSONObject movePathJSONObject = new JSONObject();
                                         movePathJSONObject.put(JSON.KEY_STATE, JSON.STATE_MOVE_TO_TARGET_PATH);
                                         movePathJSONObject.put(JSON.KEY_MOVE_TO_TARGET_PATH, movePath);
