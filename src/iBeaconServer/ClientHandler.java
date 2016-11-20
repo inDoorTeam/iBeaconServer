@@ -81,7 +81,7 @@ public class ClientHandler implements Runnable {
                             }
                         }
 
-                        if( autoFollowFlag == true && !carLocation.equals(client.getUserLocation()) ) {
+                        if( autoFollowFlag == true && !carLocation.equals(client.getUserLocation()) && client.getUserLocation() != null ) {
                             movePath = dijkstra.getPath(carLocation, client.getUserLocation());
                             carLocation = client.getUserLocation();
                             System.out.println("movePath : " + movePath);
@@ -356,7 +356,7 @@ public class ClientHandler implements Runnable {
                     case JSON.STATE_AUTO_FOLLOW:
                         if(autoFollowFlag == false){
                             autoFollowFlag = true;
-                            if( !client.getUserLocation().equals(carLocation) ){
+                            if( !carLocation.equals(client.getUserLocation()) && client.getUserLocation() != null ){
                                 movePath = dijkstra.getPath(carLocation, client.getUserLocation());
                                 carLocation = client.getUserLocation();
                                 System.out.println("movePath : " + movePath);
