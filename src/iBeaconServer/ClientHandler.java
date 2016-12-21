@@ -145,7 +145,7 @@ public class ClientHandler implements Runnable {
                             }
                         }
 
-                        if(itemRssi < -55 && GuideDB.getInstance().isMyItem(client, itemMinor)){
+                        if(itemRssi < -60 && GuideDB.getInstance().isMyItem(client, itemMinor)){
                             for(Item item : itemList) {
                                 if( itemMinor == item.getMinor() && item.getFlag() == false) {
                                     System.out.println("Rssi : " + itemRssi + "遺失物 : " + item.getItemName());
@@ -291,11 +291,15 @@ public class ClientHandler implements Runnable {
                             + ", cost: " + LostCost + ", description: " + LostDescription);
 
                         for(Item item : itemList) {
-                            if(LostItemName.equals(item.getItemName()) && GuideDB.getInstance().isMyItem(client, item.getMinor())){
+                            if(("phone").equals(item.getItemName()) && GuideDB.getInstance().isMyItem(client, item.getMinor())){
                                 Item.setLostItem(item);
                                 item.setFlag(true);
+                                for (Item lostItem : Item.getLostItem()) {
+                                    if (item.getMinor() == lostItem.getMinor() ){
+                                        lostItem.setPreLocation(client.getUserLocation());
+                                    }
+                                }
                             }
-
                         }
 
                         break;
